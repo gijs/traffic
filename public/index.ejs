@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+		<title>Cape Town • Traffic Analysis</title>
+
+	    <link href='http://fonts.googleapis.com/css?family=Francois+One' rel='stylesheet' type='text/css'>
+	    <link href="vendor/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	    <link href="vendor/bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+	    <link href="vendor/bower_components/leaflet/dist/leaflet.css" rel="stylesheet">
+	    <link href="vendor/bower_components/leaflet.draw/dist/leaflet.draw.css" rel="stylesheet">
+	    <link href="vendor/bower_components/leaflet.loading/src/Control.Loading.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/app.css">
+
+	    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	    <!--[if lt IE 9]>
+	      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	    <![endif]-->
+
+	    <script>
+			if(typeof(console) === 'undefined') {
+			    var console = {}
+			    console.log = console.error = console.info = console.debug = console.warn = console.trace = console.dir = console.dirxml = console.group = console.groupEnd = console.time = console.timeEnd = console.assert = console.profile = function() {};
+			}
+
+			var asciiArray = [
+			  " ██▓     ██▓▒███████▒ ▄▄▄       ██▀███  ▓█████▄             ",
+			  "▓██▒    ▓██▒▒ ▒ ▒ ▄▀░▒████▄    ▓██ ▒ ██▒▒██▀ ██▌            ",
+			  "▒██░    ▒██▒░ ▒ ▄▀▒░ ▒██  ▀█▄  ▓██ ░▄█ ▒░██   █▌            ",
+			  "▒██░    ░██░  ▄▀▒   ░░██▄▄▄▄██ ▒██▀▀█▄  ░▓█▄   ▌            ",
+			  "░██████▒░██░▒███████▒ ▓█   ▓██▒░██▓ ▒██▒░▒████▓             ",
+			  "░ ▒░▓  ░░▓  ░▒▒ ▓░▒░▒ ▒▒   ▓▒█░░ ▒▓ ░▒▓░ ▒▒▓  ▒             ",
+			  "░ ░ ▒  ░ ▒ ░░░▒ ▒ ░ ▒  ▒   ▒▒ ░  ░▒ ░ ▒░ ░ ▒  ▒             ",
+			  "  ░ ░    ▒ ░░ ░ ░ ░ ░  ░   ▒     ░░   ░  ░ ░  ░             ",
+			  "    ░  ░ ░    ░ ░          ░  ░   ░        ░                ",
+			  "            ░                            ░                  ",
+			  "Interesse?                                                  ",
+			  "http://www.nelen-schuurmans.nl/NL/bedrijfsprofiel/carriere/ "
+			];
+			var hiring = asciiArray.join('\n');
+			console.log(hiring);
+
+			window.clientid = <%=id%>;
+	    </script>		
+	</head>
+	<body id="capetownapp">
+		<!-- <script src="js/bundle.js"></script> -->
+		<script src="js/bundle.min.js"></script>
+	    <script src="vendor/bower_components/modernizr/modernizr.js"></script>
+	</body>
+</html>
