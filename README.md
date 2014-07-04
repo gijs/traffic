@@ -95,8 +95,8 @@ Loading data into PostGIS
   $ psql -h 192.168.59.103 -p 49153 -d pggis -U pggis --password < sa_2po_4pgr.sql
 ```
 
- Installation of the application stack
- -------------------------------------
+Installation of the application stack
+-------------------------------------
 
  * In the project root:
 
