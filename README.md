@@ -12,14 +12,17 @@ SERVER
   - Assign enough memory when running Docker
   - When using boot2docker (win/mac), assign like:
 
-  	$ boot2docker init -m 5555
-  	... lots of output ...
+```bash
+    $ boot2docker init -m 5555
+    ... lots of output ...
+```
 
   - Double-check the memory allocation:
 
+```bash
     $ boot2docker info
     { ... "Memory":5555 ...}
-
+```
 
 Optionally: Boot2docker (win/mac)
 ---------------------------------
@@ -30,9 +33,11 @@ Optionally: Boot2docker (win/mac)
 
  * Use Homebrew to install boot2docker, then:
 
+```bash
    $ boot2docker up
    $ boot2docker ip # Use this IP in the next command
    $ export DOCKER_HOST=tcp://192.168.59.103:2375
+```
 
   * To make DOCKER_HOST persist, add it to your .bashrc/.zshrc/etc.
 
@@ -42,7 +47,9 @@ Installation of the PostGIS stack
 
  * Install the Oslandia PGGIS docker stack (https://github.com/vpicavet/docker-pggis):
 
+```bash
    $ docker run -Pd --name pggis_daemon oslandia/pggis /sbin/my_init
+```
 
  * This uses a Docker-optimized Trusty image
 
@@ -50,11 +57,15 @@ Installation of the PostGIS stack
 
  * Connect using `psql` like such (or use a GUI):
 
+```bash
    $ psql -h 192.168.59.103 -p 49153 -d pggis -U pggis --password
+```
 
  * Check out the portmapping using:
 
+```bash
    $ docker ps -a
+```
 
 
 Loading data into PostGIS
@@ -62,6 +73,7 @@ Loading data into PostGIS
 
  * Run the following SQL importing commands from the project root
 
+```bash
   $ psql -h 192.168.59.103 -p 49153 -d pggis -U pggis --password < ./sql/emme_links3857.sql
   $ psql -h 192.168.59.103 -p 49153 -d pggis -U pggis --password < ./sql/emme_tlines3857.sql
   $ psql -h 192.168.59.103 -p 49153 -d pggis -U pggis --password < ./sql/emme_nodes3857.sql
@@ -72,22 +84,25 @@ Loading data into PostGIS
   $ psql -h 192.168.59.103 -p 49153 -d pggis -U pggis --password < ./sql/emme_spider.sql
   $ psql -h 192.168.59.103 -p 49153 -d pggis -U pggis --password < ./sql/create_polygons_table.sql
   $ psql -h 192.168.59.103 -p 49153 -d pggis -U pggis --password < ./sql/create_sessions_table.sql
+```
 
  * Download both the .osm and .pbf files for the desired region from Geofabrik.de
 
  * Download and unzip osm2po
- 
+
+```bash 
   $ java -jar osm2po.jar prefix=sa ../southafrica.osm.pbf
-
   $ psql -h 192.168.59.103 -p 49153 -d pggis -U pggis --password < sa_2po_4pgr.sql
-
+```
 
  Installation of the application stack
  -------------------------------------
 
  * In the project root:
 
+```bash
   $ docker run -Pd --name capetown_app lizard/traffic /sbin/my_init
+```
 
  * This uses a Docker-optimized Trusty image
 
@@ -113,10 +128,11 @@ Loading data into PostGIS
 
  * CartoCSS definitions
 
+```bash
   $ curl -H "Content-Type: application/json" -d '{"style": "#emme_tlines3857 {line-width: 2;line-opacity:0.7;line-color:#000000;}"}' http://[ip]:8080/database/pggis/table/emme_tlines3857/style
 
   $ curl -H "Content-Type: application/json" -d '{"style": "#emme_costliest {line-width: 2;line-opacity:0.7;line-color:#ff0000;}"}' http://192.168.59.103:8080/database/pggis/table/emme_costliest/style
 
   $ curl -H "Content-Type: application/json" -d '{"style": "#emme_spider {line-width: 0.5;line-opacity:0.5;line-color:#551a8b;}"}' http://192.168.59.103:8080/database/pggis/table/emme_spider/style
-
+```
 
