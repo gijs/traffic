@@ -1,7 +1,7 @@
 README
 ------
 
-This will instruct............
+Instructions on how to get this up and running using Docker.
 
 
 SERVER
