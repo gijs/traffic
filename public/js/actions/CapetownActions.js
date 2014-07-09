@@ -17,10 +17,17 @@ var CapetownActions = {
 	},
 
 	mapClick: function(data) {
-		console.log('CapetownActions.mapClick:', data);
+		// console.log('CapetownActions.mapClick:', data);
 		AppDispatcher.handleViewAction({
 			actionType: CapetownConstants.CLICK_MAP,
 			text: data
+		});
+	},
+
+	setScenario: function(scenario) {
+		AppDispatcher.handleViewAction({
+			actionType: CapetownConstants.SET_SCENARIO,
+			text: scenario
 		});
 	}
 

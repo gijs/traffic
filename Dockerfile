@@ -24,6 +24,12 @@ RUN apt-get install -y autoconf build-essential cmake docbook-mathml docbook-xsl
 # Application packages
 RUN apt-get install -y postgresql-client-9.3
 
+# LuaRocks
+RUN apt-get install -y luarocks
+
+# The following was needed on Precise, not sure if also needed on Trusty:
+RUN luarocks install luasql-postgres PGSQL_DIR=/usr/lib/postgresql/9.1/bin PGSQL_INCDIR=/usr/include/postgresql
+
 
 # Mapnik 2
 RUN apt-get install -y libmapnik2.2 mapnik-utils libmapnik2-dev
@@ -38,6 +44,10 @@ RUN add-apt-repository -y ppa:chris-lea/node.js
 RUN apt-get update
 RUN apt-get install -y nodejs
 
+# Modern g++ toolchain
+RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test
+RUN apt-get update
+RUN apt-get install -y g++-4.8
 
 # JDK
 RUN apt-get install -y openjdk-7-jdk

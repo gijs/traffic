@@ -9,20 +9,27 @@ var merge = require('react/lib/merge');
 
 var CHANGE_EVENT = 'change';
 
+var _scenario = 1;
 var _distance = 0;
 var _mapClickedObj = {};
+
+function setScenario(scenario) {
+	_scenario = scenario;
+}
 
 function setDistance(value) {
 	_distance = value;
 }
 
 function setMapClickedObject(object) {
-	console.log('setMapClickedObject:', object);
 	_mapClickedObj = object;
 }
 
 
 var CapetownStore = merge(EventEmitter.prototype, {
+	getScenario: function() {
+		return _scenario;
+	},
 	getDistance: function() {
 		return _distance;
 	},
@@ -51,6 +58,9 @@ AppDispatcher.register(function(payload) {
 			break;
 		case CapetownConstants.SET_DISTANCE:
 			setDistance(action.text);
+			break;
+		case CapetownConstants.SET_SCENARIO:
+			setScenario(action.text);
 			break;
 		default:
 			return true;

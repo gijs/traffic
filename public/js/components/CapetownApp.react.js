@@ -12,6 +12,17 @@ var Map = require('./Map.react');
 var React = require('react');
 var CapetownStore = require('../stores/CapetownStore');
 
+
+
+/**
+ * Retrieve the current scenario from the CapetownStore
+ */
+function getScenario() {
+  return {
+    scenario: CapetownStore.getScenario()
+  };
+}
+
 /**
  * Retrieve the current distance data from the CapetownStore
  */
@@ -51,7 +62,7 @@ var CapetownApp = React.createClass({
    return (
       <div>
         <Header />
-        <Map distance={this.state.distance} clickedObject={this.state.mapclick} />
+        <Map scenario={this.state.scenario} distance={this.state.distance} clickedObject={this.state.mapclick} />
       </div>
    );
   },  
@@ -62,7 +73,8 @@ var CapetownApp = React.createClass({
    */
   _onChange: function() {
     this.setState(getDistance());
-    this.setState(getMapClick())
+    this.setState(getMapClick());
+    this.setState(getScenario());
   }
 
 });

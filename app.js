@@ -25,6 +25,9 @@ var Profiler = require('step-profiler');
 var PSQL = require('./psql');
 var StatsD = require('node-statsd').StatsD;
 
+
+var OSRM = require('osrm');
+
 var TMS_SCHEME = false;
 var mapnikTokens_RE = /!bbox!|!pixel_width!|!pixel_height!/;
 
@@ -1426,6 +1429,64 @@ function(req, res) {
   });
 });
 
+
+
+
+
+
+
+
+app.get('/api/v1/links',
+function(req, res) {
+  
+  var query = client.query('SELECT ST_AsGeoJSON(ST_Transform(ST_SetSRID(geom, 3857),4326)) AS geometry, spd AS speed FROM "emme_links3857" LIMIT 500');
+
+  var response = {'type': 'FeatureCollection', 'features': []};
+
+  query.on('row', function(row) {
+    response.features.push(
+      {'type': 'Feature',
+       'properties': {
+        'speed': row.speed
+       },
+       'geometry': JSON.parse(row.geometry)
+      }
+    );
+  });
+  query.on('end', function(result) {
+    res.json(response);
+  });
+});
+
+// app.get('/api/v1/links',
+// function(req, res) {
+
+
+//   var sql = 'SELECT ST_AsGeoJson(ST_Transform(ST_SetSRID(geom, 3857),4326)) AS json_link FROM emme_links3857 LIMIT 500';
+//   var query = client.query(sql, function(err, result) {
+//     //NOTE: error handling not present
+//     if(result) {
+//       console.log(toGeoJson(result.rows))
+//       // console.log('result:', result);
+//       // res.json(result);
+//     } else {
+//       console.log('catchment error:', err);
+//       res.json(err);
+//     }
+//   });
+//   var rows = [];
+//   query.on('row', function(row) {
+//     console.log('row.json_link', JSON.parse(row.json_link));
+//     rows.push(JSON.parse(row.json_link));
+//   });
+//   query.on('end', function(result) {
+//     console.log('rows-------------->', rows);
+//     res.json(rows);
+//   });
+//   query.on('error', function(error) {
+//     console.log(error);
+//   });
+// });
 
 
 app.get('/api/v1/catchment/:clientid',

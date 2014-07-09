@@ -30,6 +30,10 @@ var Header = React.createClass({
     // console.log('updateSliderValue():', e.data);
     CapetownActions.setDistance(e.data);
   },
+  setScenario: function(e) {
+    // console.log('setScenario:', e.target.dataset.scenario);
+    CapetownActions.setScenario(e.target.dataset.scenario);
+  },
   render: function() {
     return (
         <div className="FilterPanel navbar navbar-fixed-top" id="filterpanel" style={{height: this.props.filterPanelHeight}}>
@@ -48,13 +52,13 @@ var Header = React.createClass({
                 <div className="col-xs-1 col-sm-1 col-md-6 col-lg-8" id="Controls" style={{minWidth: 200}}>
                   <TabbedArea defaultActiveKey={1}>
                     <TabPane key={1} tab="Scenarios">
-                        &nbsp;<a href="">Congestion</a>&nbsp;
-                        &nbsp;<a href="">Infrastructure</a>&nbsp;
-                        &nbsp;<a href="">Urban growth</a>&nbsp;
-                        &nbsp;<a href="">Optimal routes</a>&nbsp;
-                        &nbsp;<a href="">Cost-benefit</a>&nbsp;
-                        &nbsp;<a href="">Noisiest &amp; quietest zones</a>&nbsp;
-                        &nbsp;<a href="">Accessibility</a>
+                        &nbsp;<a href="#" data-scenario="1" onClick={this.setScenario}>Congestion</a>&nbsp;
+                        &nbsp;<a href="#" data-scenario="2" onClick={this.setScenario}>Infrastructure</a>&nbsp;
+                        &nbsp;<a href="#" data-scenario="3" onClick={this.setScenario}>Urban growth</a>&nbsp;
+                        &nbsp;<a href="#" data-scenario="4" onClick={this.setScenario}>Optimal routes</a>&nbsp;
+                        &nbsp;<a href="#" data-scenario="5" onClick={this.setScenario}>Cost-benefit</a>&nbsp;
+                        &nbsp;<a href="#" data-scenario="6" onClick={this.setScenario}>Noisiest &amp; quietest zones</a>&nbsp;
+                        &nbsp;<a href="#" data-scenario="7" onClick={this.setScenario}>Accessibility</a>
                     </TabPane>
                     <TabPane key={2} tab="Settings">
                       <div style={{margin:'15px 0 0 0'}}>

@@ -3,34 +3,34 @@ var _ = require('underscore');
 config = {};
 
 config.pg = {};
-config.pg.conString = "tcp://pggis:pggis@192.168.59.103:49153/pggis";
+config.pg.conString = "tcp://traffic:traffic@localhost/traffic";
 
 config.mapnik = {};
 
 config.mapnik.postgis_emme_tlines_settings = {
-  'dbname' : 'pggis',
+  'dbname' : 'traffic',
   'table' : 'emme_tlines3857',
-  'user' : 'pggis',
-  'password': 'pggis',
+  'user' : 'traffic',
+  'password': 'traffic',
   'type' : 'postgis',
   'extent' : '-20005048.4188,-9039211.13765,19907487.2779,17096598.5401'  //change this if not merc
 };
 
 
 config.mapnik.postgis_emme_links_settings = {
-  'dbname' : 'pggis',
+  'dbname' : 'traffic',
   'table' : 'emme_links3857',
-  'user' : 'pggis',
-  'password': 'pggis',
+  'user' : 'traffic',
+  'password': 'traffic',
   'type' : 'postgis',
   'extent' : '-20005048.4188,-9039211.13765,19907487.2779,17096598.5401'  //change this if not merc
 };
 
 config.mapnik.postgis_emme_nodes_settings = {
-  'dbname' : 'pggis',
+  'dbname' : 'traffic',
   'table' : 'emme_nodes3857',
-  'user' : 'pggis',
-  'password': 'pggis',
+  'user' : 'traffic',
+  'password': 'traffic',
   'type' : 'postgis',
   'extent' : '-20005048.4188,-9039211.13765,19907487.2779,17096598.5401'  //change this if not merc
 };
@@ -42,11 +42,11 @@ config.windshaft = {
     base_url_notable: '/database/:dbname',
     grainstore: {
          datasource: {
-            user:'pggis', 
-            password:'pggis',
-            host: '192.168.59.103', 
+            user:'traffic', 
+            password:'traffic',
+            host: 'localhost', 
             geometry_field: 'geom',
-            port: 49153
+            port: 5432
         }
     }, // see grainstore npm for other options
     redis: {
