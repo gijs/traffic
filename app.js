@@ -7,6 +7,7 @@ var http = require('http');
 var ejs = require('ejs');
 var path = require('path');
 var pg = require('pg');
+var Q=require('q');
 var express = require('express');
 var Hashids = require("hashids"),
     hashids = new Hashids("$#f4f314f4444dasdsadaddddioij3n2nn#");
@@ -1610,10 +1611,81 @@ function(req, res) {
 });
 
 
+var osrm = new OSRM('../osm/south-africa-and-lesotho-latest.osrm');
+
+app.get('/api/v1/spider',
+function(req, res) {
+
+  var id = parseInt(req.query.id);
+  var radius = parseInt(req.query.radius) || 5000;
+  var routes = [];
+  var coordinates = [];
+
+  function query() {
+    var deferred = Q.defer();
+    var query = client.query('SELECT ST_X(ST_Transform(ST_SetSRID(a.geom, 3857),4326)) AS fromlat, ST_Y(ST_Transform(ST_SetSRID(a.geom, 3857),4326)) AS fromlon, ST_X(ST_Transform(ST_SetSRID(b.geom, 3857),4326)) AS tolat, ST_Y(ST_Transform(ST_SetSRID(b.geom, 3857),4326)) AS tolon FROM emme_veh AS c, emme_nodes3857 AS b, emme_nodes3857 AS a WHERE c.fid = a.id AND c.tid = b.id AND c.fid = $1 AND ST_Distance(a.geom, b.geom) < $2', [id, radius], function(err, result) {
+      for(var i in result.rows) {
+        coordinates.push({'from':[result.rows[i].fromlon,result.rows[i].fromlat], 'to':[result.rows[i].tolon,result.rows[i].tolat]});
+      }
+      deferred.resolve();
+    });
+    return deferred.promise;
+  }
+
+  function computeRoutes() {
+    var the_promises = [];
+
+    coordinates.forEach(function(coordinate) {
+      var deferred = Q.defer();
+      
+      osrm.route({coordinates: [coordinate.from, coordinate.to], alternateRoute: false}, function(err, result) {      
+        deferred.resolve(result);
+        routes.push(result.route_geometry);
+      });
+      the_promises.push(deferred.promise);
+    });
+
+    return Q.all(the_promises);
+  }
+
+  function returnRoutes() {
+    console.log('route calculated...');
+    return res.json(routes);
+  }
+
+  query()
+    .then(function() {
+      return computeRoutes();
+    })
+    .then(function() {
+      return returnRoutes();
+    });
+});
 
 
 
 
+app.get('/api/v1/routest', 
+function(req, res) {
+
+    if (!req.query.start || !req.query.end) {
+        return res.json({"error":"invalid start and end query"});
+    }
+    var coordinates = [];
+    var start = req.query.start.split(',');
+    coordinates.push([+start[0],+start[1]]);
+    var end = req.query.end.split(',');
+    coordinates.push([+end[0],+end[1]]);
+    var query = {
+        coordinates: coordinates,
+        alternateRoute: req.query.alternatives !== 'false'
+    };
+    osrm.route(query, function(err, result) {
+        if (err) return res.json({"error":err.message});
+        return res.json(result);
+    });
+
+});
 
 
 

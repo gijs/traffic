@@ -26,6 +26,8 @@
     "step-profiler": "git://github.com/CartoDB/node-step-profiler.git#0.0.1",
     "torque.js": "~2.2.0",
     "node-statsd": "~0.0.7",
-    "hashids": ""
+    "hashids": "",
+    "q": "",
+    "deep-diff": ""
   }
 }

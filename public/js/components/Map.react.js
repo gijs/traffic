@@ -8,11 +8,12 @@ var ReactPropTypes = React.PropTypes;
 var d3 = require('d3');
 var $ = require('jquery');
 var L = require('leaflet');
+var deep = require('deep-diff');
 require('leaflet-draw');
 require('leaflet-hash');
 require('../../vendor/bower_components/leaflet.loading/src/Control.Loading.js');
 require('../../vendor/bower_components/leaflet.utfgrid/dist/leaflet.utfgrid.js');
-
+var decode_polyline = require('../utils/OSRMRoutingGeometry');
 
 /*
  * Customizing Leaflet
@@ -246,7 +247,7 @@ var Map = React.createClass({
 		// 	maxZoom: 18
 		// }).addTo(this.map);
 
-		var emme_nodes_grid = new L.UtfGrid('/database/traffic/table/emme_nodes3857/{z}/{x}/{y}.grid.json?cache_policy=persist&interactivity=id,inboai&sql=select geom,id,inboai::text from emme_nodes3857', {
+		var emme_nodes_grid = new L.UtfGrid('/database/traffic/table/emme_nodes3857/{z}/{x}/{y}.grid.json?cache_policy=persist&interactivity=id,inboai&sql=select geom,id,inboai::text from emme_nodes3857 WHERE iszone = 1', {
 		    useJsonP: false
 		});
 
@@ -565,15 +566,17 @@ var Map = React.createClass({
 	componentDidUpdate: function() {
 
 		
-		if(window.oldScenario !== this.props.scenario) {
-			console.log('Scenario changed from ' + window.oldScenario + ' to ' + this.props.scenario + '!');
-		}
-		window.oldScenario = this.props.scenario;
+		// if((window.oldScenario !== this.props.scenario) && (window.oldScenario !== undefined)) {
+		// 	console.log('Scenario changed from ' + window.oldScenario + ' to ' + this.props.scenario + '!');
+		// }
+		// window.oldScenario = this.props.scenario;
+
+		// console.log('------>',this.props.scenario);
 
 
+		// use https://github.com/flitbit/diff to check if this.props contains new/changed stuff
 
-
-
+		// console.log(decode_polyline('~}yu_Acfneb@oMjg@y[m^uX_Z\\yFlAgSpEcYfTosAzBy]bAmXcAoCM}CqA{DuCeJwBiLsRedAi}@qsEiGyYmHge@o@oDaCsOgF{e@oHiq@{BmTmCe[uO{dBuHoz@yEch@iSm{BaGmp@eGcq@iEei@sEeg@yJikAy@mIcFgi@]eRaDe]uOmkBoGoq@wBkS{@oKaD_^oC}XwAuPiJq_A}JueAmK}lA}Ce^mB{RiGmo@}Fuo@S{FuFmk@}J}aAoJ{iA{@_NgBkSuEif@eEce@aFoj@wAeNeDy^}Dob@aCqWqAkNUgDgM_rAsDm^_LukAmEe_@y@{IiGsp@sAiJmBiQ{Fio@c@uEyB{T_I_y@uReqB{Euf@{Euf@oOs~AoOq~AmOk~AuOo_B_Iyx@uEue@wIm}@sOi_BoOq~AmO_~AsOi_BmJgaAg@eFir@ehHg_BolPwFal@uM}bAgMkwAkAyJuRmyBoGsq@qGer@iGup@gGap@uG}r@cGmo@}Fin@mGss@{Guq@aHgr@oGyo@yGuo@kGyp@sGir@kGqp@oGqq@sGar@iGgp@mGkq@mGuq@_@wDgFmi@kG}p@kGop@uGwr@kGsp@oGqq@kGyp@aP_dBmGwp@uGur@g@sFuFig@iG}o@eHur@u@aIaF_f@iEsb@qAeM}Gmq@}Gcq@_Hyp@wB}TyCeZ}Gcq@uG_p@aEac@yAeH|EaClOeEtt@mR`hByg@z]_Jft@cRn[_KpRgGv[kMx{Acr@|`HkbD`{Aet@tXsMfLwEnN}DrMgCrFcAbgKkoBAsEQwT_@kc@W}cBaAaRiA{SeFyk@gByZfTgD|SkEvNkGtPgNjPsWzDjD|o@iH|Ch]', 6));
 
 
 		// if(this.props.clickedObject) {
@@ -590,17 +593,56 @@ var Map = React.createClass({
 		// }
 
 
-		// if(this.props.clickedObject) {
-		// 	console.log('this.props.clickedObject:', this.props.clickedObject);
 
-		// 	var sql = 'SELECT c.*, ST_MakeLine(a.geom, b.geom) AS geom FROM emme_veh AS c, emme_nodes3857 AS b, emme_nodes3857 AS a WHERE c.fid = a.id AND c.tid = b.id AND c.fid = ' + this.props.clickedObject.id.toString() + ' AND ST_Distance(a.geom, b.geom) < 5000';
-		// 	if(this.props.dynamicLayers[0].emme_costliest_dynamic) window.map.removeLayer(this.props.dynamicLayers[0].emme_costliest_dynamic);
-		// 	this.props.dynamicLayers[0].emme_costliest_dynamic = L.tileLayer(
-		// 		'/database/traffic/table/emme_costliest/{z}/{x}/{y}.png?cache_policy=persist&sql='+sql, {
-		// 		maxZoom: 18
-		// 	}).addTo(window.map);
-		// 	this.props.dynamicLayers[0].emme_costliest_dynamic.bringToFront();
+		// if((window.oldProps !== this.props) && (window.oldProps !== undefined)) {
+		// 	console.log('Props changed from ' + window.oldProps + ' to ' + this.props + '!');
 		// }
+		// window.oldProps = this.props;
+
+
+
+		// var differences = deep.diff(this.props, window.oldProps);		
+		// console.log(differences);
+
+		var color_brewer = ["#a6cee3","#1f78b4","#b2df8a","#33a02c",
+		                    "#fb9a99","#e31a1c","#fdbf6f","#ff7f00",
+		                    "#cab2d6","#6a3d9a","#ffff99","#b15928"];
+		var randomColor = function (arr) {
+		    return arr[Math.floor(Math.random() * (arr.length + 1))];
+		};	
+
+		if(this.props.clickedObject) {
+			console.log('this.props.clickedObject:', this.props.clickedObject);
+
+			$.get('/api/v1/spider?radius=5000&id=' + this.props.clickedObject.id.toString(), function(routes) {
+
+				for(var i in routes) {
+
+					var polyline = L.polyline([], {
+						color: randomColor(color_brewer),
+						clickable: false,
+						weight: 2
+					});
+
+					var polyarr = decode_polyline(routes[i], 6);
+					for(var j in polyarr) {
+						polyline.addLatLng(new L.LatLng(polyarr[j][0], polyarr[j][1]));
+					}
+					polyline.addTo(window.map);
+					
+				}
+			});
+
+
+			// Render Mapnik layer
+			var sql = 'SELECT c.*, ST_MakeLine(a.geom, b.geom) AS geom FROM emme_veh AS c, emme_nodes3857 AS b, emme_nodes3857 AS a WHERE c.fid = a.id AND c.tid = b.id AND c.fid = ' + this.props.clickedObject.id.toString() + ' AND ST_Distance(a.geom, b.geom) < 5000';
+			// if(this.props.dynamicLayers[0].emme_costliest_dynamic) window.map.removeLayer(this.props.dynamicLayers[0].emme_costliest_dynamic);
+			this.props.dynamicLayers[0].emme_costliest_dynamic = L.tileLayer(
+				'/database/traffic/table/emme_costliest/{z}/{x}/{y}.png?cache_policy=persist&sql='+sql, {
+				maxZoom: 18
+			}).addTo(window.map);
+			this.props.dynamicLayers[0].emme_costliest_dynamic.bringToFront();
+		}
 
 		// if(this.props.distance) {
 
